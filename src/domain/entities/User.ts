@@ -1,10 +1,11 @@
 import {Role} from "./Role"
 
 export interface User {
-    id: number
+    id: string
     createdAt: Date
     updatedAt: Date
     email: string
     password: string
+    salt: string
     role?: Role
 }

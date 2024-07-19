@@ -1,7 +1,7 @@
 import {Role} from "./Role"
 
 export interface Permission {
-    id: number
+    id: string
     resource: string
     operation: string
     role: Role

@@ -1,7 +1,7 @@
 import {Permission} from "./Permission"
 
 export interface Role {
-    id: number
+    id: string
     createdAt: Date
     updatedAt: Date
     name: string
