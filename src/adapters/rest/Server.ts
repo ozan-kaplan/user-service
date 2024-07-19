@@ -2,7 +2,7 @@ import express, {Router, Request, Response} from "express"
 import helmet from "helmet"
 import StatusCode from "./StatusCode"
 import AuthController from "./Controllers/AuthController"
-import {IUserService} from "../../../domain/services/interfaces/IUserService"
+import {IUserService} from "../../domain/services/interfaces/IUserService"
 
 export default class Server {
     private express: express.Express

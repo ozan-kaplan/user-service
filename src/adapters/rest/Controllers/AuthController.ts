@@ -1,7 +1,7 @@
 import {Router, Request, Response, NextFunction} from "express"
 import Controller from "./Controller"
 import StatusCode from "../StatusCode"
-import {IUserService} from "../../../../domain/services/interfaces/IUserService"
+import {IUserService} from "../../../domain/services/interfaces/IUserService"
 
 export default class AuthController implements Controller {
     private userService: IUserService

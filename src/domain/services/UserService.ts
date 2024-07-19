@@ -2,7 +2,7 @@ import {v4 as uuid} from "uuid"
 import {Role} from "../entities/Role"
 import crypto from "crypto"
 import {User} from "../entities/User"
-import {IUserRepository} from "../../ports/driven/repositories/IUserRepository"
+import {IUserRepository} from "../ports/repositories/IUserRepository"
 
 export default class UserService {
     constructor(private userRepository: IUserRepository) {}

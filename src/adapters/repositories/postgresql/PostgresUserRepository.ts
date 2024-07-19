@@ -1,5 +1,5 @@
-import {User} from "../../../../domain/entities/User"
-import {IUserRepository} from "../../../../ports/driven/repositories/IUserRepository"
+import {IUserRepository} from "../../../domain/ports/repositories/IUserRepository"
+import {User} from "../../../domain/entities/User"
 
 export class PostgresUserRepository implements IUserRepository {
     public async Create(user: User): Promise<User> {
