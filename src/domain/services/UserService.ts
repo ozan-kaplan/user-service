@@ -1,13 +1,13 @@
 import {v4 as uuid} from "uuid"
-import {IUserRepository} from "../repositories/IUserRepository"
 import {Role} from "../entities/Role"
 import crypto from "crypto"
 import {User} from "../entities/User"
+import {IUserRepository} from "../../ports/driven/repositories/IUserRepository"
 
 export default class UserService {
     constructor(private userRepository: IUserRepository) {}
 
-    public async Create(email: string, password: string, role: Role): Promise<User> {
+    public async Create(email: string, password: string, role?: Role): Promise<User> {
         // Check if email or password is empty
         if (!email || !password)
             throw new Error("Email or password is empty")
