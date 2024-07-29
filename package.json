@@ -1,5 +1,5 @@
 {
-  "name": "hexagon-app",
+  "name": "user-service",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ozan-kaplan/hexagon-app.git"
+    "url": "git+https://github.com/ozan-kaplan/user-service.git"
   },
   "author": "Ozan KAPLAN",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ozan-kaplan/hexagon-app/issues"
+    "url": "https://github.com/ozan-kaplan/user-service/issues"
   },
-  "homepage": "https://github.com/ozan-kaplan/hexagon-app#readme",
+  "homepage": "https://github.com/ozan-kaplan/user-service#readme",
   "dependencies": {
     "@prisma/client": "^5.17.0",
     "@types/express": "^4.17.21",
