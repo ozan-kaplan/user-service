@@ -3,16 +3,19 @@ import helmet from "helmet"
 import StatusCode from "./StatusCode"
 import UserController from "./controllers/UserController"
 import {CreateUserHandler} from "../application/features/handlers/CreateUserHandler"
+import {GetUserByIdHandler} from "../application/features/handlers/GetUserByIdHandler"
 
 export default class UserRestServer {
     private express: express.Express
     private readonly port: number
 
     private createUserHandler: CreateUserHandler
+    private getUserByIdHandler: GetUserByIdHandler
 
-    constructor(port: number, createUserHandler: CreateUserHandler) {
+    constructor(port: number, createUserHandler: CreateUserHandler, getUserByIdHandler: GetUserByIdHandler) {
         this.port = port
         this.createUserHandler = createUserHandler
+        this.getUserByIdHandler = getUserByIdHandler
 
         this.express = express()
 
@@ -85,7 +88,7 @@ export default class UserRestServer {
     }
 
     private initializeControllers(): void {
-        const userController = new UserController(Router(),this.createUserHandler)
+        const userController = new UserController(Router(), this.createUserHandler, this.getUserByIdHandler)
 
         this.express.use("/v1/user", userController.router)
     }
