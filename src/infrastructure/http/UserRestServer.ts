@@ -1,21 +1,18 @@
 import express, {Router, Request, Response} from "express"
 import helmet from "helmet"
-import StatusCode from "./StatusCode"
-import UserController from "./controllers/UserController"
-import {CreateUserHandler} from "../application/features/handlers/CreateUserHandler"
-import {GetUserByIdHandler} from "../application/features/handlers/GetUserByIdHandler"
+import {AuthService} from "../../application/services/AuthService"
+import HttpStatusCode from "./HttpStatusCode"
+import {AuthController} from "./controllers/AuthController"
+import {IAuthService} from "../../application/ports/services/IAuthService"
 
 export default class UserRestServer {
     private express: express.Express
     private readonly port: number
+    private readonly authService: IAuthService
 
-    private createUserHandler: CreateUserHandler
-    private getUserByIdHandler: GetUserByIdHandler
-
-    constructor(port: number, createUserHandler: CreateUserHandler, getUserByIdHandler: GetUserByIdHandler) {
+    constructor(port: number, authService: IAuthService) {
         this.port = port
-        this.createUserHandler = createUserHandler
-        this.getUserByIdHandler = getUserByIdHandler
+        this.authService = authService
 
         this.express = express()
 
@@ -30,11 +27,13 @@ export default class UserRestServer {
         this.handlers()
     }
 
+
     public listen() {
         this.express.listen(this.port, () => {
-            console.log(`🚀 User Service REST server is running port: ${this.port}`)
+            console.log(`🚀 User REST server is running port: ${this.port}`)
         })
     }
+
 
     private config(): void {
         this.express.use(express.json())
@@ -55,6 +54,18 @@ export default class UserRestServer {
         this.express.use(helmet.permittedCrossDomainPolicies())
         this.express.use(helmet.referrerPolicy())
         this.express.use(helmet.xssFilter())
+
+        this.express.all('*', function (req, res, next) {
+            res.header('Access-Control-Allow-Origin', 'http://localhost:4200')
+            res.header('Access-Control-Allow-Methods', 'GET, POST, PUT')
+            res.header('Access-Control-Allow-Headers', 'Content-Type')
+            res.header('Access-Control-Allow-Credentials', 'true')
+            if ('OPTIONS' == req.method) {
+                res.sendStatus(200)
+            } else {
+                next()
+            }
+        })
     }
 
     private healthcheck(): void {
@@ -69,7 +80,7 @@ export default class UserRestServer {
                 return res.send(healthcheck)
             } catch (error) {
                 healthcheck.message = (error as Error).message
-                return res.status(StatusCode.ServerErrorServiceUnavailable).send(healthcheck)
+                return res.status(HttpStatusCode.ServerErrorServiceUnavailable).send(healthcheck)
             }
         })
     }
@@ -77,19 +88,19 @@ export default class UserRestServer {
     private handlers(): void {
         // Custom 404 response
         this.express.use((req: Request, res: Response) => {
-            return res.status(StatusCode.ClientErrorNotFound).send({message: "Sorry can't find that!"})
+            return res.status(HttpStatusCode.ClientErrorNotFound).send({message: "Sorry can't find that!"})
         })
 
         // Custom error handler
         this.express.use((err: Error, req: Request, res: Response) => {
             console.error(err.stack)
-            return res.status(StatusCode.ServerErrorInternal).send({message: "Something broke!", code: "SERVER_ERROR"})
+            return res.status(HttpStatusCode.ServerErrorInternal).send({message: "Something broke!", code: "SERVER_ERROR"})
         })
     }
 
     private initializeControllers(): void {
-        const userController = new UserController(Router(), this.createUserHandler, this.getUserByIdHandler)
+        const authController = new AuthController(Router(), this.authService)
 
-        this.express.use("/v1/user", userController.router)
+        this.express.use("/v1/auth", authController.router)
     }
 }

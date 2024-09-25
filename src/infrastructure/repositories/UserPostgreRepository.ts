@@ -1,4 +1,4 @@
-import {IUserRepository} from "../../application/interfaces/repositories/IUserRepository"
+import {IUserRepository} from "../../application/ports/repositories/IUserRepository"
 import {User, UserStatus} from "../../domain/models/User"
 import {PrismaClient} from "@prisma/client";
 
@@ -48,9 +48,9 @@ export class UserPostgreRepository implements IUserRepository {
         return this.toDomain(newUser);
     }
 
-    public async Update(id: string, user: Partial<User>): Promise<User> {
+    public async Update(user: Partial<User>): Promise<User> {
         const updatedUser = await this.prisma.user.update({
-            where: {id},
+            where: {id: user.id},
             data: user
         });
 
@@ -63,6 +63,24 @@ export class UserPostgreRepository implements IUserRepository {
 
     public async FindById(id: string): Promise<User | null> {
         const user = await this.prisma.user.findUnique({where: {id}});
+
+        if (!user)
+            return null
+
+        return this.toDomain(user);
+    }
+
+    public async FindByEmail(email: string): Promise<User | null> {
+        const user = await this.prisma.user.findFirst({where: { email: email } });
+
+        if (!user)
+            return null
+
+        return this.toDomain(user);
+    }
+
+    public async FindByRefreshToken(refreshToken: string): Promise<User | null> {
+        const user = await this.prisma.user.findFirst({where: { refresh_token: refreshToken } });
 
         if (!user)
             return null

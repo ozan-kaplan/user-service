@@ -3,7 +3,7 @@
  *
  * @public
  */
-export enum StatusCode {
+export enum HttpStatusCode {
     /**
      * The server cannot or will not process the request due to an apparent
      * client error (e.g., malformed request syntax, size too large, invalid
@@ -462,4 +462,4 @@ export enum StatusCode {
 /**
  * @public
  */
-export default StatusCode
+export default HttpStatusCode;
